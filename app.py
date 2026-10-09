@@ -9,7 +9,6 @@ st.title("🏥 Panel de Control de Vencimientos y Traspasos - Farmacias Hospital
 st.markdown("Sube tus reportes mensuales para analizar la rotación y los traspasos entre farmacias.")
 
 st.sidebar.header("📁 Carga de Reportes Mensuales")
-# Texto más explícito solicitado
 stock_file = st.sidebar.file_uploader("Sube el archivo de Stock Actual (debe incluir stock crítico, mínimo y máximo) (.xlsx)", type=["xlsx"])
 venc_file = st.sidebar.file_uploader("Sube el archivo de Vencimientos 90 días (.xlsx)", type=["xlsx"])
 salidas_file = st.sidebar.file_uploader("Sube el archivo de Salidas por Bodega (.xlsx)", type=["xlsx"])
@@ -78,7 +77,7 @@ if stock_file and venc_file and salidas_file:
                         best_other = op
                 deficit = batch_qty - est_consumption_own
                 if max_other_consumption > 0:
-                    return f"TRASPARAR a {best_other} (Consumo allí: {max_other_consumption:.1f}/mes)"
+                    return f"TRASPASAR o CANJEAR a {best_other} (Consumo allí: {max_other_consumption:.1f}/mes)"
                 else:
                     return f"ALERTA CRÍTICA: Sin consumo registrado en farmacias"
 
