@@ -6,10 +6,11 @@ import io
 st.set_page_config(page_title="Gestión Inteligente de Vencimientos - Hospital", page_icon="💊", layout="wide")
 
 st.title("🏥 Panel de Control de Vencimientos y Traspasos - Farmacias Hospitalarias")
-st.markdown("Sube tus reportes mensuales (con cualquier nombre) para analizar la rotación y los traspasos entre farmacias.")
+st.markdown("Sube tus reportes mensuales para analizar la rotación y los traspasos entre farmacias.")
 
 st.sidebar.header("📁 Carga de Reportes Mensuales")
-stock_file = st.sidebar.file_uploader("Sube el archivo de Stock Actual (.xlsx)", type=["xlsx"])
+# Texto más explícito solicitado
+stock_file = st.sidebar.file_uploader("Sube el archivo de Stock Actual (debe incluir stock crítico, mínimo y máximo) (.xlsx)", type=["xlsx"])
 venc_file = st.sidebar.file_uploader("Sube el archivo de Vencimientos 90 días (.xlsx)", type=["xlsx"])
 salidas_file = st.sidebar.file_uploader("Sube el archivo de Salidas por Bodega (.xlsx)", type=["xlsx"])
 
