@@ -1,13 +1,13 @@
 import streamlit as st
 import pandas as pd
 import datetime
+import io
 
 st.set_page_config(page_title="Gestión Inteligente de Vencimientos - Hospital", page_icon="💊", layout="wide")
 
 st.title("🏥 Panel de Control de Vencimientos y Traspasos - Farmacias Hospitalarias")
 st.markdown("Sube tus reportes mensuales para analizar la rotación y los traspasos entre farmacias.")
 
-# Sidebar para subir archivos de forma interactiva
 st.sidebar.header("📁 Carga de Reportes")
 stock_file = st.sidebar.file_uploader("Sube el archivo de Stocks (.xlsx)", type=["xlsx"])
 venc_file = st.sidebar.file_uploader("Sube el archivo de Vencimientos 90 días (.xlsx)", type=["xlsx"])
@@ -105,12 +105,17 @@ if stock_file and venc_file and salidas_file:
     display_cols = ['Bodega', 'Codigo', 'Producto', 'Lote', 'Fecha_Vencimiento', 'Cantidad', 'Total', 'Dias_Para_Vencer', 'Recomendacion']
     st.dataframe(df_filtered[display_cols].style.format({'Total': '${:,.0f}', 'Fecha_Vencimiento': lambda x: x.strftime('%d/%m/%Y')}), use_container_width=True)
 
-    csv = df_filtered[display_cols].to_csv(index=False, encoding='utf-8-sig')
+    # Función para generar Excel en memoria para descarga directa
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df_filtered[display_cols].to_excel(writer, index=False, sheet_name='Traspasos y Vencimientos')
+    processed_data = output.getvalue()
+
     st.download_button(
-        label="📥 Descargar Reporte Filtrado en CSV",
-        data=csv,
-        file_name='reporte_traspasos_streamlit.csv',
-        mime='text/csv',
+        label="📥 Descargar Reporte Filtrado en Excel (.xlsx)",
+        data=processed_data,
+        file_name='reporte_traspasos_hospital.xlsx',
+        mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     )
 else:
     st.info("👈 Por favor, sube los tres archivos Excel en la barra lateral izquierda para comenzar el análisis.")
