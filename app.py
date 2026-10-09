@@ -6,10 +6,10 @@ import io
 st.set_page_config(page_title="Gestión Inteligente de Vencimientos - Hospital", page_icon="💊", layout="wide")
 
 st.title("🏥 Panel de Control de Vencimientos y Traspasos - Farmacias Hospitalarias")
-st.markdown("Sube tus reportes mensuales para analizar la rotación y los traspasos entre farmacias.")
+st.markdown("Sube tus reportes mensuales (con cualquier nombre) para analizar la rotación y los traspasos entre farmacias.")
 
-st.sidebar.header("📁 Carga de Reportes")
-stock_file = st.sidebar.file_uploader("Sube el archivo de Stocks (.xlsx)", type=["xlsx"])
+st.sidebar.header("📁 Carga de Reportes Mensuales")
+stock_file = st.sidebar.file_uploader("Sube el archivo de Stock Actual (.xlsx)", type=["xlsx"])
 venc_file = st.sidebar.file_uploader("Sube el archivo de Vencimientos 90 días (.xlsx)", type=["xlsx"])
 salidas_file = st.sidebar.file_uploader("Sube el archivo de Salidas por Bodega (.xlsx)", type=["xlsx"])
 
@@ -105,7 +105,6 @@ if stock_file and venc_file and salidas_file:
     display_cols = ['Bodega', 'Codigo', 'Producto', 'Lote', 'Fecha_Vencimiento', 'Cantidad', 'Total', 'Dias_Para_Vencer', 'Recomendacion']
     st.dataframe(df_filtered[display_cols].style.format({'Total': '${:,.0f}', 'Fecha_Vencimiento': lambda x: x.strftime('%d/%m/%Y')}), use_container_width=True)
 
-    # Función para generar Excel en memoria para descarga directa
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df_filtered[display_cols].to_excel(writer, index=False, sheet_name='Traspasos y Vencimientos')
